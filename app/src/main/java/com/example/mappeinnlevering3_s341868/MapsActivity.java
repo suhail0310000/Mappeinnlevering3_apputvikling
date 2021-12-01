@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -73,9 +74,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 selectedLat = latLng.latitude;
                 selectedLng = latLng.longitude;
                 Log.d(""+selectedLat,""+selectedLng);
-                //GetAddress(selectedLat,selectedLng);
+                GetAddress(selectedLat,selectedLng);
             }
         });
+    }
+
+    public String GetAddress(double lat, double lng) {
+        Log.d("", "skal finne adresse");
+        String strAdd = "";
+        /*String innCity = addresses.get(0).getAdminArea();
+        String innPost = addresses.get(0).getPostalCode();*/
+        geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+            String innCity = addresses.get(0).getThoroughfare();
+            String innPost = addresses.get(0).getSubThoroughfare();
+            //&& addresses.get(0).getPostalCode() != null
+            //&& addresses.get(0).getPostalCode() != null
+            if (addresses != null && addresses.size() > 0 && innCity != null && innPost != null) {
+                Log.d("", "Adressenn: "+ addresses.get(0).getLocality());
+                Log.d("", "Adressenn2: "+addresses.get(0).getAdminArea());
+                Log.d("", "Adressenn3: "+addresses.get(0).getAddressLine(0));
+                Log.d("", "Adressenn4: "+addresses.get(0).getPostalCode());
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("My Current loction address", strReturnedAddress.toString());
+                //displayBottomFragment();
+                //visInfoFragment();
+                //setContentView(R.layout.fragment_register);
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+                //setContentView(R.layout.fragment_register);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
+
+    public void visInfoFragment(){
+        DisplayBottomFragment blankFragment = new DisplayBottomFragment();
+        blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
+        /*VisInfoFragment visInfoFragment = new VisInfoFragment();
+        visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
     }
 
     private class getJSON extends AsyncTask<String, Void, String> {
