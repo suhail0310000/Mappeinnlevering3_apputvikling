@@ -105,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
                 //displayBottomFragment();
-                //visInfoFragment();
+                visInfoFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
                 Log.w("My Current loction address", "No Address returned!");
@@ -188,8 +188,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             catch(Exception e){
                 Log.d(ss,"feil");
             }*/
-
-
         }
     }
 }
