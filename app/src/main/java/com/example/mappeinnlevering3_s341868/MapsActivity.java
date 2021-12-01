@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mappeinnlevering3_s341868.databinding.ActivityMapsBinding;
 
@@ -24,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +34,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Geocoder geocoder;
+    private MarkerOptions options = new MarkerOptions();
+    private ArrayList<LatLng> husMarkers = new ArrayList<>();
+    /*LatLng pakistan = new LatLng(59.916306, 10.740548);
+    LatLng oslomet = new LatLng( 59.9211, 10.7334);*/
     private double selectedLat, selectedLng;
     List<Address> addresses;
 
@@ -46,8 +52,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        getJSON task = new getJSON();
-        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/jsonout.php"});
+        /*husMarkers.add(pakistan);
+        husMarkers.add(oslomet);*/
+
+        /*getJSON task = new getJSON();
+        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/jsonout.php"});*/
+        //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
     }
 
     /**
@@ -63,10 +73,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(59.916306, 10.740548);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Starting point
+        //LatLng startPoint = new LatLng(59.916306, 10.740548);
+        //mMap.addMarker(new MarkerOptions().position(startPoint).title("Marker in Sydney"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(startPoint));
+
+        //get json objects from this url
+        getJSON task = new getJSON();
+        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
+        System.out.println("Task in finished");
+        System.out.println("Status for task"+task.getStatus());
+        //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test3.php"});
+        displayMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -75,6 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 selectedLng = latLng.longitude;
                 Log.d(""+selectedLat,""+selectedLng);
                 GetAddress(selectedLat,selectedLng);
+                //displayMarker();
             }
         });
     }
@@ -118,6 +137,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return strAdd;
     }
 
+    public void displayMarker(){
+        System.out.println("metoden fungerer");
+        for(LatLng marker : husMarkers){
+            System.out.println("MARKERRRR--------------------"+marker);
+            mMap.addMarker(new MarkerOptions().position(marker));
+        }
+        /*for(int i = 0; i<husMarkers.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(husMarkers.get(i)));
+        }*/
+        //latlngs.add(new LatLng(59.916306, 10.740548));
+       /* for (LatLng point : latlngs) {
+            System.out.println("POINTTTTTTT:   "+point);
+            options.position(point);
+            options.title("someTitle");
+            options.snippet("someDesc");
+            System.out.println("OPTIONSSSS:"+options);
+            mMap.addMarker(options);
+        }*/
+        /*for (LatLng point : latlngs) {
+            options.position(point);
+            options.title("someTitle");
+            options.snippet("someDesc");
+            mMap.addMarker(options);
+        }*/
+        /*LatLng husMarkers = new LatLng(latitude, longtitude);
+        mMap.addMarker(new MarkerOptions().position(husMarkers).title("Marker in Sydneyyy"));*/
+    }
+
     public void visInfoFragment(){
         DisplayBottomFragment blankFragment = new DisplayBottomFragment();
         blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
@@ -125,6 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
     }
 
+    //Get information from database
     private class getJSON extends AsyncTask<String, Void, String> {
         JSONObject jsonObject;
 
@@ -153,11 +201,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     conn.disconnect();
                     try {
-                        JSONArray mat = new JSONArray(output);
-                        for (int i = 0; i < mat.length(); i++) {
-                            JSONObject jsonobject = mat.getJSONObject(i);
-                            String name = jsonobject.getString("name");
-                            retur = retur + name + "\n";
+                        JSONArray hus = new JSONArray(output);
+                        for (int i = 0; i < hus.length(); i++) {
+                            JSONObject jsonobject = hus.getJSONObject(i);
+                            //debugging
+                            /*System.out.println("Jsonobject:-----------------------------"+jsonobject);
+                            String name = jsonobject.getString("name");*/
+                            //String adresse = jsonobject.getString("adresse");
+                            double latitude = jsonobject.getDouble("latitude");
+                            double longitude = jsonobject.getDouble("longitude");
+                            husMarkers.add(new LatLng(latitude, longitude));
+                            //displayMarker();
+                            /*System.out.println(adresse);
+                            System.out.println(longitude);
+                            System.out.println(latitude);*/
+                            retur = retur + latitude + "\n";
                         }
                         return retur;
                     } catch (JSONException e) {
@@ -175,6 +233,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(String ss) {
             //textView.setText(ss);
             Log.d("", ss);
+            displayMarker();
             /*String retur = "";
             try{
                 JSONArray mat=new JSONArray(ss);
