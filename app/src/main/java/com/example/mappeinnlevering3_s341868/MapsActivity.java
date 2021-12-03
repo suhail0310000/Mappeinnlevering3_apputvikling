@@ -239,8 +239,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //textView.setText(ss);
             Log.d("", ss);
             displayMarker();
-            //visInfoFragment();
-            visRegFragment();
+            visInfoFragment();
+            //visRegFragment();
             /*String retur = "";
             try{
                 JSONArray mat=new JSONArray(ss);
