@@ -4,16 +4,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import org.json.JSONObject;
+
 public class VisRegistrerFragment extends DialogFragment {
+    String innAdresse;
+    //Get all id's from bottom fragment
+    TextView txtAddresse;
+
+    public VisRegistrerFragment(String innAdresse) {
+        this.innAdresse = innAdresse;
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        System.out.println("Adressen er funner i fragment"+innAdresse);
         View v = inflater.inflate(R.layout.fragment_registrer, container, false);
+        txtAddresse = (TextView) v.findViewById(R.id.reg_txtAdresse);
+        txtAddresse.setText(innAdresse);
         return v;
         //resources = getResources();
 

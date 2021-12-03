@@ -1,5 +1,6 @@
 package com.example.mappeinnlevering3_s341868;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.location.Address;
@@ -35,7 +36,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     private Geocoder geocoder;
     private MarkerOptions options = new MarkerOptions();
-    private ArrayList<LatLng> husMarkers = new ArrayList<>();
+    //private ArrayList<LatLng> husMarkers = new ArrayList<>();
+    private ArrayList<JSONObject> husMarkers = new ArrayList<>();
     /*LatLng pakistan = new LatLng(59.916306, 10.740548);
     LatLng oslomet = new LatLng( 59.9211, 10.7334);*/
     private double selectedLat, selectedLng;
@@ -74,17 +76,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //Starting point
-        //LatLng startPoint = new LatLng(59.916306, 10.740548);
+        LatLng startPoint = new LatLng(59.916306, 10.740548);
         //mMap.addMarker(new MarkerOptions().position(startPoint).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(startPoint));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,15));
 
         //get json objects from this url
         getJSON task = new getJSON();
         task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
         System.out.println("Task in finished");
         System.out.println("Status for task"+task.getStatus());
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                visInfoFragment(marker.getSnippet());
+                return true;
+            }
+        });
         //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test3.php"});
-        displayMarker();
+        //displayMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -123,6 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
+                visRegFragment(addresses.get(0).getAddressLine(0));
                 //displayBottomFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
@@ -137,43 +147,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void displayMarker(){
-        System.out.println("metoden fungerer");
-        for(LatLng marker : husMarkers){
-            System.out.println("MARKERRRR--------------------"+marker);
-            mMap.addMarker(new MarkerOptions().position(marker));
+        for(JSONObject marker : husMarkers){
+            try {
+                System.out.println("Jsonobject:"+marker);
+                String getID = marker.getString("id");
+                double getlat = marker.getDouble("latitude");
+                double getLongtude = marker.getDouble("longitude");
+                Log.d("Posisjon",getlat+""+getLongtude);
+                LatLng nyHus = new LatLng(getlat, getLongtude);
+                mMap.addMarker(new MarkerOptions().position(nyHus).snippet(getID));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //mMap.addMarker(new MarkerOptions().position(marker));
         }
-        /*for(int i = 0; i<husMarkers.size(); i++){
-            mMap.addMarker(new MarkerOptions().position(husMarkers.get(i)));
-        }*/
-        //latlngs.add(new LatLng(59.916306, 10.740548));
-       /* for (LatLng point : latlngs) {
-            System.out.println("POINTTTTTTT:   "+point);
-            options.position(point);
-            options.title("someTitle");
-            options.snippet("someDesc");
-            System.out.println("OPTIONSSSS:"+options);
-            mMap.addMarker(options);
-        }*/
-        /*for (LatLng point : latlngs) {
-            options.position(point);
-            options.title("someTitle");
-            options.snippet("someDesc");
-            mMap.addMarker(options);
-        }*/
-        /*LatLng husMarkers = new LatLng(latitude, longtitude);
-        mMap.addMarker(new MarkerOptions().position(husMarkers).title("Marker in Sydneyyy"));*/
     }
-
-    public void visInfoFragment(){
-        DisplayBottomFragment blankFragment = new DisplayBottomFragment();
-        blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
+    public void visInfoFragment(String snippet){
+        for(JSONObject marker : husMarkers){
+            String getId = null;
+            try {
+                getId = marker.getString("id");
+                if(snippet.equals(getId)){
+                    DisplayBottomFragment blankFragment = new DisplayBottomFragment(marker);
+                    blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+                /*System.out.println("Jsonobject:"+marker);
+                double getlat = marker.getDouble("latitude");
+                double getLongtude = marker.getDouble("longitude");
+                Log.d("Posisjon",getlat+""+getLongtude);
+                LatLng nyHus = new LatLng(getlat, getLongtude);
+                mMap.addMarker(new MarkerOptions().position(nyHus));*/
+            //mMap.addMarker(new MarkerOptions().position(marker));
+        }
         /*VisInfoFragment visInfoFragment = new VisInfoFragment();
         visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
     }
 
-    public void visRegFragment(){
+    public void visRegFragment(String innAdresse){
         System.out.print("Vis reg fragment");
-        VisRegistrerFragment visRegFragment = new VisRegistrerFragment();
+        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse);
         visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
     }
 
@@ -213,14 +228,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             /*System.out.println("Jsonobject:-----------------------------"+jsonobject);
                             String name = jsonobject.getString("name");*/
                             //String adresse = jsonobject.getString("adresse");
-                            double latitude = jsonobject.getDouble("latitude");
-                            double longitude = jsonobject.getDouble("longitude");
-                            husMarkers.add(new LatLng(latitude, longitude));
+                           /* double latitude = jsonobject.getDouble("latitude");
+                            double longitude = jsonobject.getDouble("longitude");*/
+                            //husMarkers.add(new LatLng(latitude, longitude));
+                            husMarkers.add(jsonobject);
                             //displayMarker();
                             /*System.out.println(adresse);
                             System.out.println(longitude);
                             System.out.println(latitude);*/
-                            retur = retur + latitude + "\n";
+                            retur = retur + jsonobject + "\n";
                         }
                         return retur;
                     } catch (JSONException e) {
@@ -239,7 +255,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //textView.setText(ss);
             Log.d("", ss);
             displayMarker();
-            visInfoFragment();
             //visRegFragment();
             /*String retur = "";
             try{
