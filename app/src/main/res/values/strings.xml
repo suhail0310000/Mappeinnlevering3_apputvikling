@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MappeInnlevering3_s341868</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="etasjer">Etasjer</string>
+    <string name="beskrivelse">Beskrivelse</string>
+    <string name="txt_header">Addresse</string>
 </resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="@color/blue"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="@string/txt_header">
+            </TextView>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/blue"
+            android:layout_marginLeft="20dp"
+            android:text="@string/txt_header">
+        </TextView>
+
+        <EditText
+            android:id="@+id/registrer_etasjer"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
+            android:background="@drawable/edit_border"
+            android:padding="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_margin="20dp"
+            android:hint="@string/etasjer"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/registrer_etternavn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/registrer_beskrivelse"
+            android:layout_width="230dp"
+            android:layout_height="150dp"
+            android:background="@drawable/edit_border"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_margin="20dp"
+            android:hint="@string/beskrivelse"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/registrer_beskrivelse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_registrer_kontakt3"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_register"
+            android:text="Register hus"
+            android:textColor="#ffffff"></Button>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

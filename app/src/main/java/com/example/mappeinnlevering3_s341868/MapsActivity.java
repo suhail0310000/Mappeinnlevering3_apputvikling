@@ -124,7 +124,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
                 //displayBottomFragment();
-                visInfoFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
                 Log.w("My Current loction address", "No Address returned!");
@@ -170,6 +169,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
         /*VisInfoFragment visInfoFragment = new VisInfoFragment();
         visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
+    }
+
+    public void visRegFragment(){
+        System.out.print("Vis reg fragment");
+        VisRegistrerFragment visRegFragment = new VisRegistrerFragment();
+        visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
     }
 
     //Get information from database
@@ -234,6 +239,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //textView.setText(ss);
             Log.d("", ss);
             displayMarker();
+            //visInfoFragment();
+            visRegFragment();
             /*String retur = "";
             try{
                 JSONArray mat=new JSONArray(ss);
