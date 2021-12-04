@@ -106,6 +106,7 @@
         android:layout_marginTop="15dp">
 
         <ImageButton
+            android:id="@+id/btnEndre"
             android:layout_width="120dp"
             android:layout_height="80dp"
             android:text="Slett"

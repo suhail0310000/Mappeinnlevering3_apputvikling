@@ -8,6 +8,8 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,6 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng oslomet = new LatLng( 59.9211, 10.7334);*/
     private double selectedLat, selectedLng;
     List<Address> addresses;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +86,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //get json objects from this url
         getJSON task = new getJSON();
         task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
-        System.out.println("Task in finished");
-        System.out.println("Status for task"+task.getStatus());
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker) {
-                visInfoFragment(marker.getSnippet());
-                return true;
-            }
-        });
         //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test3.php"});
         //displayMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -103,6 +97,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d(""+selectedLat,""+selectedLng);
                 GetAddress(selectedLat,selectedLng);
                 //displayMarker();
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                visInfoFragment(marker.getSnippet());
+                return true;
             }
         });
     }
@@ -124,6 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("", "Adressenn2: "+addresses.get(0).getAdminArea());
                 Log.d("", "Adressenn3: "+addresses.get(0).getAddressLine(0));
                 Log.d("", "Adressenn4: "+addresses.get(0).getPostalCode());
+                Log.d("", "Adressenn4: "+addresses.get(0).getThoroughfare()+" "+addresses.get(0).getSubThoroughfare());
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
@@ -132,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
-                visRegFragment(addresses.get(0).getAddressLine(0));
+                visRegFragment(addresses.get(0).getThoroughfare()+","+addresses.get(0).getSubThoroughfare(),selectedLat,selectedLng);
                 //displayBottomFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
@@ -186,9 +189,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
     }
 
-    public void visRegFragment(String innAdresse){
+    public void visRegFragment(String innAdresse, double selectedLat, double selectedLng){
         System.out.print("Vis reg fragment");
-        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse);
+        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng);
         visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
     }
 
@@ -255,6 +258,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //textView.setText(ss);
             Log.d("", ss);
             displayMarker();
+            //visEndreFragment();
             //visRegFragment();
             /*String retur = "";
             try{
@@ -270,5 +274,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d(ss,"feil");
             }*/
         }
+
+
     }
 }

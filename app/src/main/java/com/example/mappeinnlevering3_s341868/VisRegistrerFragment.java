@@ -1,31 +1,58 @@
 package com.example.mappeinnlevering3_s341868;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.sql.SQLSyntaxErrorException;
 
 public class VisRegistrerFragment extends DialogFragment {
     String innAdresse;
+    double selectedLat;
+    double selectedLng;
     //Get all id's from bottom fragment
-    TextView txtAddresse;
+    TextView txtAddresse, txtEtasjer, txtBeskrivelse;
+    Button btnRegistrer;
 
-    public VisRegistrerFragment(String innAdresse) {
+    public VisRegistrerFragment(String innAdresse, double selectedLat, double selectedLng) {
         this.innAdresse = innAdresse;
+        this.selectedLat = selectedLat;
+        this.selectedLng = selectedLng;
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         System.out.println("Adressen er funner i fragment"+innAdresse);
+        System.out.println("Latitude er funner i fragment"+selectedLat);
+        System.out.println("Langtude er funner i fragment"+selectedLng);
         View v = inflater.inflate(R.layout.fragment_registrer, container, false);
         txtAddresse = (TextView) v.findViewById(R.id.reg_txtAdresse);
+        txtEtasjer = (TextView) v.findViewById(R.id.registrer_etasjer);
+        txtBeskrivelse = (TextView) v.findViewById(R.id.registrer_beskrivelse);
         txtAddresse.setText(innAdresse);
+        registrerHus(v);
         return v;
         //resources = getResources();
 
@@ -38,5 +65,76 @@ public class VisRegistrerFragment extends DialogFragment {
         }catch (Exception e){}
         txt_tlf = (EditText) v.findViewById(R.id.txt_edit_kontakt_tlf);
         txt_tlf.setText(((Kontakt) kontakt).getTlf());*/
+    }
+    public void registrerHus(View v){
+        btnRegistrer = (Button) v.findViewById(R.id.btn_registrer_hus);
+        btnRegistrer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("","Registrert");
+                System.out.println(txtAddresse.getText());
+                System.out.println(txtEtasjer.getText());
+                System.out.println(txtBeskrivelse.getText());
+                /*getJSON task = new getJSON();*/
+                //String str = "{\"adresse\":\"txtAddresse.getText()\",\"age\":\"30\"}";
+                getJSON task = new getJSON();
+                //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse=testeeer&latitude=1&longitude=2&etasjer=3&beskrivelse=test"});
+                String innUrl;
+                String innUrl1;
+                try {
+                    innUrl = URLEncoder.encode(txtAddresse.getText().toString(), "UTF-8");
+                    innUrl1 = URLEncoder.encode(txtBeskrivelse.getText().toString(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    innUrl = "";
+                    innUrl1 = "";
+                    e.printStackTrace();
+                }
+                if(!innUrl.equals("")){
+                    task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse="+innUrl+"&latitude="+selectedLat+"&longitude="+selectedLng+"&etasjer="+txtEtasjer.getText().toString()+"&beskrivelse="+innUrl1});
+                }
+            }
+        });
+    }
+
+    //Get information from database
+    private class getJSON extends AsyncTask<String, Void, String> {
+        JSONObject jsonObject;
+
+        @Override
+        protected String doInBackground(String... urls) {
+            //String retur = "";
+            String s = "";
+            String output = "";
+            for (String url : urls) {
+                try {
+                    URL urlen = new URL(urls[0]);
+                    HttpURLConnection conn = (HttpURLConnection)
+                            urlen.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Accept",
+                            "application/json");
+                    if (conn.getResponseCode() != 200) {
+                        throw new RuntimeException("Failed : HTTP error code : "
+                                + conn.getResponseCode());
+                    }
+                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                            (conn.getInputStream())));
+                    System.out.println("Output from Server .... \n");
+                    while ((s = br.readLine()) != null) {
+                        output = output + s;
+                    }
+                    conn.disconnect();
+                    return output;
+                } catch (Exception e) {
+                    return "Noe gikk feil";
+                }
+            }
+            return output;
+        }
+
+        @Override
+        protected void onPostExecute(String ss) {
+            Log.d("", ss);
+        }
     }
 }

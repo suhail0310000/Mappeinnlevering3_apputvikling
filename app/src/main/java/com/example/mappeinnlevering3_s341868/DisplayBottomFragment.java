@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 public class DisplayBottomFragment extends BottomSheetDialogFragment {
     JSONObject jsonObject;
     //Get all id's from bottom fragment
+    ImageButton endreBtn;
     TextView txtAddresse,txtEtasjer,txtBeskrivelse;
 
     public DisplayBottomFragment(JSONObject jsonObject) {
@@ -30,12 +32,13 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.print("Printer ut Jsonovjer"+jsonObject);
+        System.out.print("jsonobject in bottomfragment"+jsonObject);
         Log.d("Printer ut Jsonovjer",jsonObject.toString()+"");
         View v = inflater.inflate(R.layout.fragment_bottominfo, container, false);
 
         txtAddresse = (TextView) v.findViewById(R.id.adresse);
         strukturerInfo(v);
+        displayEndreFragment(v,jsonObject);
         /*registrer_etternavn = (EditText) v.findViewById(R.id.registrer_etternavn);
         registrer_tlf = (EditText) v.findViewById(R.id.registrer_tlf);*/
         return v;
@@ -56,4 +59,18 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
             e.printStackTrace();
         }
     }
+
+    public void displayEndreFragment(View v, JSONObject jsonObject){
+        System.out.println("clicked");
+        endreBtn = (ImageButton) v.findViewById(R.id.btnEndre);
+        endreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                VisEndreFragment visEndreFragment = new VisEndreFragment(jsonObject);
+                visEndreFragment.show(getFragmentManager().beginTransaction(),"Endre fragment");
+            }
+        });
+    }
+
+
 }
