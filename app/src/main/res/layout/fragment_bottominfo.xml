@@ -105,7 +105,7 @@
             android:text="Endre"
             android:src="@drawable/ic_baseline_mode_edit_24"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="60dp"
             android:background="@color/white"
             android:padding="8dp"></ImageButton>
 

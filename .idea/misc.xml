@@ -3,14 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26615384615384613" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable/btn_register.xml" value="0.2703125" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable/edit_border.xml" value="0.2703125" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable/ic_baseline_mode_edit_24.xml" value="0.2703125" />
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/drawable/ic_launcher_background.xml" value="0.26615384615384613" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/layout/activity_maps.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/layout/fragment_bottominfo.xml" value="0.1" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/layout/fragment_endre.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/layout/fragment_registrer.xml" value="0.11200000000000002" />
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/mipmap-anydpi-v26/ic_geocodelogo.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/mipmap-anydpi-v26/ic_geocodelogo_round.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/Suhai/MappeInnlevering3_s341868/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.14635416666666667" />
       </map>
     </option>
   </component>

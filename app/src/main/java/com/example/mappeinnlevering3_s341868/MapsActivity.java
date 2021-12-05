@@ -81,15 +81,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Starting point
         LatLng startPoint = new LatLng(59.916306, 10.740548);
         //mMap.addMarker(new MarkerOptions().position(startPoint).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,17));
 
         //get json objects from this url
         getJSON task = new getJSON();
-        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
+        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/henthus.php"});
         //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test3.php"});
         //displayMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
+            @Override   
             public void onMapClick(LatLng latLng) {
                 Log.d("clicked","clicked");
                 selectedLat = latLng.latitude;

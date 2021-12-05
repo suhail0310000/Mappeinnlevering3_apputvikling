@@ -98,7 +98,7 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
     public void visAlert(){
         new AlertDialog.Builder(getContext())
                 .setTitle("Ønsker du å slette huset?")
-                .setMessage("HFSHDSFHSHF")
+                .setMessage("Trykk på 'Ja', dersom du ønsker å slette info om huset i databasen.")
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -109,7 +109,6 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
                 .setNegativeButton("Nei", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        System.out.println("trukket på nei");
                     }
                 }).show();
     }
