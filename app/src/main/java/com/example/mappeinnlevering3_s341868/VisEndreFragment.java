@@ -101,7 +101,6 @@ public class VisEndreFragment extends DialogFragment {
                 task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/endrehus.php/?id="+innId+"&etasjer=" + innEtasjer + "&beskrivelse=" + konvBeskrivelse});
 
             }
-            //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse=testeeer&latitude=1&longitude=2&etasjer=3&beskrivelse=test"});
         }catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }catch (JSONException e){

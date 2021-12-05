@@ -38,11 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Geocoder geocoder;
-    private MarkerOptions options = new MarkerOptions();
-    //private ArrayList<LatLng> husMarkers = new ArrayList<>();
     private ArrayList<JSONObject> husMarkers = new ArrayList<>();
-    /*LatLng pakistan = new LatLng(59.916306, 10.740548);
-    LatLng oslomet = new LatLng( 59.9211, 10.7334);*/
     private double selectedLat, selectedLng;
     List<Address> addresses;
 
@@ -57,12 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        /*husMarkers.add(pakistan);
-        husMarkers.add(oslomet);*/
-
-        /*getJSON task = new getJSON();
-        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/jsonout.php"});*/
-        //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test1.php"});
     }
 
     /**
@@ -80,14 +70,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Starting point
         LatLng startPoint = new LatLng(59.916306, 10.740548);
-        //mMap.addMarker(new MarkerOptions().position(startPoint).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,16));
 
         //get json objects from this url
         getJSON task = new getJSON();
         task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/henthus.php"});
-        //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/test3.php"});
-        //displayMarker();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override   
             public void onMapClick(LatLng latLng) {
@@ -178,11 +165,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /*public void visRegFragment(String innAdresse, double selectedLat, double selectedLng){
-        System.out.print("Vis reg fragment");
-        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng);
-        visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
-    }*/
 
     public void visRegFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap){
         System.out.print("Vis reg fragment");
