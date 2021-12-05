@@ -14,14 +14,14 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:textStyle="bold"
                 android:textColor="@color/blue"
-                android:textSize="30sp"
+                android:textSize="26sp"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:text="@string/txt_header">
@@ -30,13 +30,11 @@
         <TextView
             android:id="@+id/reg_txtAdresse"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:layout_marginTop="10dp"
-            android:textColor="@color/blue"
-            android:layout_marginLeft="20dp"
-            android:text="">
+            android:layout_marginLeft="20dp">
         </TextView>
 
         <EditText
@@ -74,7 +72,7 @@
             android:layout_marginTop="20dp"
             android:layout_margin="20dp"
             android:background="@drawable/btn_register"
-            android:text="Register hus"
+            android:text="@string/register_hus"
             android:textColor="#ffffff"></Button>
     </LinearLayout>
 

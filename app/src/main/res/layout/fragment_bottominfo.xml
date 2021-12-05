@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/download"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
@@ -16,25 +15,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Adresse:"
+            android:text="@string/txt_header"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:textColor="@color/blue"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:padding="8dp"
-            android:text="@string/txt_header">
-        </TextView>-->
-
         <TextView
             android:id="@+id/adresse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ravnåsveien test adresse"
+            android:textSize="18dp"
             android:layout_gravity="center_vertical"
             android:padding="8dp" />
     </LinearLayout>
@@ -43,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/shareLinearLayout"
+        android:textSize="18dp"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
@@ -53,6 +44,7 @@
             android:layout_height="wrap_content"
             android:text="Etasjer:"
             android:textStyle="bold"
+            android:textSize="18dp"
             android:textColor="@color/blue"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
@@ -62,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/etasjer"
-            android:text="3"
+            android:textSize="18dp"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
             />
@@ -80,8 +72,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Beskrivelse:"
+            android:text="@string/beskrivelse"
             android:textStyle="bold"
+            android:textSize="18dp"
             android:textColor="@color/blue"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
@@ -90,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/beskrivelse"
-            android:text="jdjsdjsdsjjdjdjsfjdjfdsjfjdsjfdjsfjjfsjdjsjdsjfjdjdjfjsdjsd"
+            android:textSize="18dp"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
     </LinearLayout>
@@ -107,39 +100,23 @@
 
         <ImageButton
             android:id="@+id/btnEndre"
-            android:layout_width="120dp"
-            android:layout_height="80dp"
-            android:text="Slett"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Endre"
             android:src="@drawable/ic_baseline_mode_edit_24"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="70dp"
+            android:background="@color/white"
             android:padding="8dp"></ImageButton>
 
         <ImageButton
-            android:layout_width="120dp"
-            android:layout_height="80dp"
-            android:text="Slett"
+            android:id="@+id/slettBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:src="@drawable/ic_baseline_delete_forever_24"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="75dp"
             android:padding="8dp"></ImageButton>
-
-
-        <!--<Button
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_delete_forever_24"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="25dp"
-            android:padding="8dp"/>-->
-
-        <!--<Button
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text="Delete File Selection"
-            android:src="@drawable/ic_baseline_delete_forever_24"
-            android:layout_gravity="center_vertical"
-            android:padding="8dp"
-            android:layout_marginLeft="15dp"/>-->
     </LinearLayout>
 </LinearLayout>

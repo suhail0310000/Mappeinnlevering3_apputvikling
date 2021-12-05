@@ -19,27 +19,14 @@
             <TextView
                 android:id="@+id/endre_txtAdresse"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
-                android:textSize="30sp"
+                android:textSize="26sp"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:text="@string/txt_header">
             </TextView>
         </LinearLayout>
-       <!-- <TextView
-            android:id="@+id/endre_txtAdresse"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/blue"
-            android:layout_marginLeft="20dp"
-            android:text="">
-        </TextView>-->
-
         <EditText
             android:id="@+id/endre_etasjer"
             android:layout_width="230dp"
@@ -74,8 +61,8 @@
             android:padding="10dp"
             android:layout_marginTop="20dp"
             android:layout_margin="20dp"
+            android:text="@string/endre_hus"
             android:background="@drawable/btn_register"
-            android:text="Endre informasjon"
             android:textColor="#ffffff"></Button>
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.sql.SQLSyntaxErrorException;
+import java.util.Map;
 
 public class VisRegistrerFragment extends DialogFragment {
     String innAdresse;
@@ -90,13 +92,29 @@ public class VisRegistrerFragment extends DialogFragment {
                     e.printStackTrace();
                 }
                 if(!innUrl.equals("")){
-                    task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse="+innUrl+"&latitude="+selectedLat+"&longitude="+selectedLng+"&etasjer="+txtEtasjer.getText().toString()+"&beskrivelse="+innUrl1});
+                    if(CheckAllFields()){
+                        task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/registrerhus.php/?adresse="+innUrl+"&latitude="+selectedLat+"&longitude="+selectedLng+"&etasjer="+txtEtasjer.getText().toString()+"&beskrivelse="+innUrl1});
+                        Toast.makeText(getContext(),"Hus lagret i db",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
     }
+    private boolean CheckAllFields() {
+        if (txtEtasjer.getText().length() == 0) {
+            txtEtasjer.setError("Skriv inn antall etasjer");
+            return false;
+        }
 
-    //Get information from database
+        if (txtBeskrivelse.getText().length() == 0) {
+            txtBeskrivelse.setError("Skriv inn en beskrivelse for huset");
+            return false;
+        }
+        // after all validation return true.
+        return true;
+    }
+
+    //POST REQUEST
     private class getJSON extends AsyncTask<String, Void, String> {
         JSONObject jsonObject;
 

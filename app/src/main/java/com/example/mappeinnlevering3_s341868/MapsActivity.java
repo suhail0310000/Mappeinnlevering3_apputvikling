@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,7 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -135,15 +135,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
+                LatLng nyMarker = new LatLng(selectedLat, selectedLng);
                 visRegFragment(addresses.get(0).getThoroughfare()+","+addresses.get(0).getSubThoroughfare(),selectedLat,selectedLng);
                 //displayBottomFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
+                Toast.makeText(this,"Ikke gyldig adresse",Toast.LENGTH_SHORT).show();
                 Log.w("My Current loction address", "No Address returned!");
                 //setContentView(R.layout.fragment_register);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this,"Ikke gyldig adresse",Toast.LENGTH_SHORT).show();
             Log.w("My Current loction address", "Canont get Address!");
         }
         return strAdd;
@@ -156,6 +159,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String getID = marker.getString("id");
                 double getlat = marker.getDouble("latitude");
                 double getLongtude = marker.getDouble("longitude");
+                String title = marker.getString("adresse");
+                Log.d("Tittel:",title+"");
                 Log.d("Posisjon",getlat+""+getLongtude);
                 LatLng nyHus = new LatLng(getlat, getLongtude);
                 mMap.addMarker(new MarkerOptions().position(nyHus).snippet(getID));

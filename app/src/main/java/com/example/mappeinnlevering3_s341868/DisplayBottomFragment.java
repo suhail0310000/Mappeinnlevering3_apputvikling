@@ -1,5 +1,8 @@
 package com.example.mappeinnlevering3_s341868;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +18,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 public class DisplayBottomFragment extends BottomSheetDialogFragment {
     JSONObject jsonObject;
     //Get all id's from bottom fragment
-    ImageButton endreBtn;
+    ImageButton endreBtn, slettBtn;
     TextView txtAddresse,txtEtasjer,txtBeskrivelse;
 
     public DisplayBottomFragment(JSONObject jsonObject) {
@@ -37,8 +47,10 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.fragment_bottominfo, container, false);
 
         txtAddresse = (TextView) v.findViewById(R.id.adresse);
+        slettBtn = (ImageButton) v.findViewById(R.id.slettBtn);
         strukturerInfo(v);
         displayEndreFragment(v,jsonObject);
+        slettObject(v,jsonObject);
         /*registrer_etternavn = (EditText) v.findViewById(R.id.registrer_etternavn);
         registrer_tlf = (EditText) v.findViewById(R.id.registrer_tlf);*/
         return v;
@@ -72,5 +84,88 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
         });
     }
 
+    public void slettObject(View v, JSONObject jsonObject){
+        slettBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.print("clicked");
+                Log.d("","clicked");
+                visAlert();
+            }
+        });
+    }
+
+    public void visAlert(){
+        new AlertDialog.Builder(getContext())
+                .setTitle("Ønsker du å slette huset?")
+                .setMessage("HFSHDSFHSHF")
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.out.println("trukket på ja");
+                        postReq();
+                    }
+                })
+                .setNegativeButton("Nei", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        System.out.println("trukket på nei");
+                    }
+                }).show();
+    }
+
+    public void postReq(){
+        try {
+            String innId = jsonObject.getString("id");
+            Log.d("ID",innId+"");
+            getJSON task = new getJSON();
+            //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse=testeeer&latitude=1&longitude=2&etasjer=3&beskrivelse=test"});
+            task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/sletthus.php/?id="+innId});
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Get information from database
+    private class getJSON extends AsyncTask<String, Void, String> {
+        JSONObject jsonObject;
+
+        @Override
+        protected String doInBackground(String... urls) {
+            //String retur = "";
+            String s = "";
+            String output = "";
+            for (String url : urls) {
+                try {
+                    URL urlen = new URL(urls[0]);
+                    HttpURLConnection conn = (HttpURLConnection)
+                            urlen.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.setRequestProperty("Accept",
+                            "application/json");
+                    if (conn.getResponseCode() != 200) {
+                        throw new RuntimeException("Failed : HTTP error code : "
+                                + conn.getResponseCode());
+                    }
+                    BufferedReader br = new BufferedReader(new InputStreamReader(
+                            (conn.getInputStream())));
+                    System.out.println("Output from Server .... \n");
+                    while ((s = br.readLine()) != null) {
+                        output = output + s;
+                    }
+                    conn.disconnect();
+                    return output;
+                } catch (Exception e) {
+                    return "Noe gikk feil";
+                }
+            }
+            return output;
+        }
+
+        @Override
+        protected void onPostExecute(String ss) {
+            Log.d("", ss);
+        }
+    }
 
 }
