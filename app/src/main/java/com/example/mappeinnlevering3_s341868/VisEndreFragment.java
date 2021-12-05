@@ -114,7 +114,7 @@ public class VisEndreFragment extends DialogFragment {
 
     //Get information from database
     private class getJSON extends AsyncTask<String, Void, String> {
-        JSONObject jsonObject;
+
 
         @Override
         protected String doInBackground(String... urls) {
@@ -139,7 +139,9 @@ public class VisEndreFragment extends DialogFragment {
                     while ((s = br.readLine()) != null) {
                         output = output + s;
                     }
-                    jsonObject.put("etasjer",Integer.parseInt(txtEtasjer.getText().toString()));
+                    jsonObject.remove("etasjer");
+                    jsonObject.remove("beskrivelse");
+                    jsonObject.put("etasjer",txtEtasjer.getText().toString());
                     jsonObject.put("beskrivelse",txtBeskrivelse.getText().toString());
                     conn.disconnect();
                     Log.d("Jsonobjecteeeeeet oppdatertt versjon",jsonObject+"");
