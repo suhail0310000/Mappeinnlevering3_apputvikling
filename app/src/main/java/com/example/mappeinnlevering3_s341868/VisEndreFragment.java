@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.maps.model.Marker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +33,7 @@ public class VisEndreFragment extends DialogFragment {
     Button oppdaterBtn;
 
 
-    public VisEndreFragment(JSONObject jsonObject) {
+    public VisEndreFragment(JSONObject jsonObject, Marker marker) {
         this.jsonObject = jsonObject;
     }
     @Override
@@ -62,6 +64,7 @@ public class VisEndreFragment extends DialogFragment {
             public void onClick(View view) {
                 if(CheckAllFields()){
                     postReq();
+                    dismiss();
                     Toast.makeText(getContext(),"Dine endringer er lagret",Toast.LENGTH_SHORT).show();
                 }
 
@@ -96,6 +99,7 @@ public class VisEndreFragment extends DialogFragment {
             getJSON task = new getJSON();
             if(!innBeskrivelse.equals("")) {
                 task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/endrehus.php/?id="+innId+"&etasjer=" + innEtasjer + "&beskrivelse=" + konvBeskrivelse});
+
             }
             //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse=testeeer&latitude=1&longitude=2&etasjer=3&beskrivelse=test"});
         }catch (UnsupportedEncodingException e) {
@@ -135,7 +139,10 @@ public class VisEndreFragment extends DialogFragment {
                     while ((s = br.readLine()) != null) {
                         output = output + s;
                     }
+                    jsonObject.put("etasjer",Integer.parseInt(txtEtasjer.getText().toString()));
+                    jsonObject.put("beskrivelse",txtBeskrivelse.getText().toString());
                     conn.disconnect();
+                    Log.d("Jsonobjecteeeeeet oppdatertt versjon",jsonObject+"");
                     return output;
                 } catch (Exception e) {
                     return "Noe gikk feil";

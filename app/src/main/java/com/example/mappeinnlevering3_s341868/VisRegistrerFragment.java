@@ -15,6 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,14 +40,16 @@ public class VisRegistrerFragment extends DialogFragment {
     String innAdresse;
     double selectedLat;
     double selectedLng;
+    GoogleMap mMap;
     //Get all id's from bottom fragment
     TextView txtAddresse, txtEtasjer, txtBeskrivelse;
     Button btnRegistrer;
 
-    public VisRegistrerFragment(String innAdresse, double selectedLat, double selectedLng) {
+    public VisRegistrerFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap) {
         this.innAdresse = innAdresse;
         this.selectedLat = selectedLat;
         this.selectedLng = selectedLng;
+        this.mMap = mMap;
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,17 +63,6 @@ public class VisRegistrerFragment extends DialogFragment {
         txtAddresse.setText(innAdresse);
         registrerHus(v);
         return v;
-        //resources = getResources();
-
-        /*txt_fornavn = (EditText) v.findViewById(R.id.txt_edit_kontakt_fornavn);
-        txt_fornavn.setText(((Kontakt) kontakt).getName().split(" ")[0]);
-
-        txt_etternavn = (EditText) v.findViewById(R.id.txt_edit_kontakt_etternavn);
-        try {
-            txt_etternavn.setText(((Kontakt) kontakt).getName().split(" ")[1]);
-        }catch (Exception e){}
-        txt_tlf = (EditText) v.findViewById(R.id.txt_edit_kontakt_tlf);
-        txt_tlf.setText(((Kontakt) kontakt).getTlf());*/
     }
     public void registrerHus(View v){
         btnRegistrer = (Button) v.findViewById(R.id.btn_registrer_hus);
@@ -77,6 +73,8 @@ public class VisRegistrerFragment extends DialogFragment {
                 System.out.println(txtAddresse.getText());
                 System.out.println(txtEtasjer.getText());
                 System.out.println(txtBeskrivelse.getText());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(selectedLat,selectedLng));
                 /*getJSON task = new getJSON();*/
                 //String str = "{\"adresse\":\"txtAddresse.getText()\",\"age\":\"30\"}";
                 getJSON task = new getJSON();
@@ -95,6 +93,7 @@ public class VisRegistrerFragment extends DialogFragment {
                     if(CheckAllFields()){
                         task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/registrerhus.php/?adresse="+innUrl+"&latitude="+selectedLat+"&longitude="+selectedLng+"&etasjer="+txtEtasjer.getText().toString()+"&beskrivelse="+innUrl1});
                         Toast.makeText(getContext(),"Hus lagret i db",Toast.LENGTH_SHORT).show();
+                        mMap.addMarker(markerOptions);
                     }
                 }
             }

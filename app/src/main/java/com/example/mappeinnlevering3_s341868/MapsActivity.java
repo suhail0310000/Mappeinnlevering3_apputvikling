@@ -81,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Starting point
         LatLng startPoint = new LatLng(59.916306, 10.740548);
         //mMap.addMarker(new MarkerOptions().position(startPoint).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,17));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,16));
 
         //get json objects from this url
         getJSON task = new getJSON();
@@ -103,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
-                visInfoFragment(marker.getSnippet());
+                visInfoFragment(marker.getSnippet(), marker);
                 return true;
             }
         });
@@ -112,21 +112,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public String GetAddress(double lat, double lng) {
         Log.d("", "skal finne adresse");
         String strAdd = "";
-        /*String innCity = addresses.get(0).getAdminArea();
-        String innPost = addresses.get(0).getPostalCode();*/
         geocoder = new Geocoder(this, Locale.getDefault());
         try {
             addresses = geocoder.getFromLocation(lat, lng, 1);
             String innCity = addresses.get(0).getThoroughfare();
             String innPost = addresses.get(0).getSubThoroughfare();
-            //&& addresses.get(0).getPostalCode() != null
-            //&& addresses.get(0).getPostalCode() != null
             if (addresses != null && addresses.size() > 0 && innCity != null && innPost != null) {
-                Log.d("", "Adressenn: "+ addresses.get(0).getLocality());
-                Log.d("", "Adressenn2: "+addresses.get(0).getAdminArea());
-                Log.d("", "Adressenn3: "+addresses.get(0).getAddressLine(0));
-                Log.d("", "Adressenn4: "+addresses.get(0).getPostalCode());
-                Log.d("", "Adressenn4: "+addresses.get(0).getThoroughfare()+" "+addresses.get(0).getSubThoroughfare());
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
@@ -135,8 +126,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 strAdd = strReturnedAddress.toString();
                 Log.w("My Current loction address", strReturnedAddress.toString());
-                LatLng nyMarker = new LatLng(selectedLat, selectedLng);
-                visRegFragment(addresses.get(0).getThoroughfare()+","+addresses.get(0).getSubThoroughfare(),selectedLat,selectedLng);
+                LatLng nyLatLng = new LatLng(selectedLat, selectedLng);
+                /*MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(nyMarker);*/
+                visRegFragment(addresses.get(0).getThoroughfare()+","+addresses.get(0).getSubThoroughfare(),selectedLat,selectedLng,mMap);
                 //displayBottomFragment();
                 //setContentView(R.layout.fragment_register);
             } else {
@@ -163,40 +156,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("Tittel:",title+"");
                 Log.d("Posisjon",getlat+""+getLongtude);
                 LatLng nyHus = new LatLng(getlat, getLongtude);
-                mMap.addMarker(new MarkerOptions().position(nyHus).snippet(getID));
+                mMap.addMarker(new MarkerOptions().position(nyHus).title(title).snippet(getID)).showInfoWindow();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //mMap.addMarker(new MarkerOptions().position(marker));
         }
     }
-    public void visInfoFragment(String snippet){
+    public void visInfoFragment(String snippet, Marker innMarker){
         for(JSONObject marker : husMarkers){
             String getId = null;
             try {
                 getId = marker.getString("id");
                 if(snippet.equals(getId)){
-                    DisplayBottomFragment blankFragment = new DisplayBottomFragment(marker);
+                    DisplayBottomFragment blankFragment = new DisplayBottomFragment(marker, innMarker);
                     blankFragment.show(getSupportFragmentManager(),blankFragment.getTag());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-                /*System.out.println("Jsonobject:"+marker);
-                double getlat = marker.getDouble("latitude");
-                double getLongtude = marker.getDouble("longitude");
-                Log.d("Posisjon",getlat+""+getLongtude);
-                LatLng nyHus = new LatLng(getlat, getLongtude);
-                mMap.addMarker(new MarkerOptions().position(nyHus));*/
-            //mMap.addMarker(new MarkerOptions().position(marker));
         }
-        /*VisInfoFragment visInfoFragment = new VisInfoFragment();
-        visInfoFragment.show(getSupportFragmentManager().beginTransaction(),"Info fragment");*/
     }
 
-    public void visRegFragment(String innAdresse, double selectedLat, double selectedLng){
+    /*public void visRegFragment(String innAdresse, double selectedLat, double selectedLng){
         System.out.print("Vis reg fragment");
         VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng);
+        visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
+    }*/
+
+    public void visRegFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap){
+        System.out.print("Vis reg fragment");
+        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng,mMap);
         visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
     }
 
@@ -232,18 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         JSONArray hus = new JSONArray(output);
                         for (int i = 0; i < hus.length(); i++) {
                             JSONObject jsonobject = hus.getJSONObject(i);
-                            //debugging
-                            /*System.out.println("Jsonobject:-----------------------------"+jsonobject);
-                            String name = jsonobject.getString("name");*/
-                            //String adresse = jsonobject.getString("adresse");
-                           /* double latitude = jsonobject.getDouble("latitude");
-                            double longitude = jsonobject.getDouble("longitude");*/
-                            //husMarkers.add(new LatLng(latitude, longitude));
                             husMarkers.add(jsonobject);
-                            //displayMarker();
-                            /*System.out.println(adresse);
-                            System.out.println(longitude);
-                            System.out.println(latitude);*/
                             retur = retur + jsonobject + "\n";
                         }
                         return retur;
@@ -263,21 +242,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //textView.setText(ss);
             Log.d("", ss);
             displayMarker();
-            //visEndreFragment();
-            //visRegFragment();
-            /*String retur = "";
-            try{
-                JSONArray mat=new JSONArray(ss);
-                for (int i=0;i <mat.length();i++) {
-                    JSONObject jsonobject=mat.getJSONObject(i);
-                    String name=jsonobject.getString("name");
-                    retur = retur + name+"\n" ;
-                    Log.d(retur,"prinut");
-                }
-            }
-            catch(Exception e){
-                Log.d(ss,"feil");
-            }*/
         }
 
 

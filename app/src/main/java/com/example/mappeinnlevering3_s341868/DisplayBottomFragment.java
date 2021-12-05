@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -27,12 +29,14 @@ import java.net.URLEncoder;
 
 public class DisplayBottomFragment extends BottomSheetDialogFragment {
     JSONObject jsonObject;
+    Marker marker;
     //Get all id's from bottom fragment
     ImageButton endreBtn, slettBtn;
     TextView txtAddresse,txtEtasjer,txtBeskrivelse;
 
-    public DisplayBottomFragment(JSONObject jsonObject) {
+    public DisplayBottomFragment(JSONObject jsonObject,Marker marker) {
         this.jsonObject = jsonObject;
+        this.marker = marker;
     }
 
     @Override
@@ -75,11 +79,13 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
     public void displayEndreFragment(View v, JSONObject jsonObject){
         System.out.println("clicked");
         endreBtn = (ImageButton) v.findViewById(R.id.btnEndre);
+
         endreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VisEndreFragment visEndreFragment = new VisEndreFragment(jsonObject);
+                VisEndreFragment visEndreFragment = new VisEndreFragment(jsonObject, marker);
                 visEndreFragment.show(getFragmentManager().beginTransaction(),"Endre fragment");
+                dismiss();
             }
         });
     }
@@ -120,6 +126,7 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
             getJSON task = new getJSON();
             //task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/testinn.php/?adresse=testeeer&latitude=1&longitude=2&etasjer=3&beskrivelse=test"});
             task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/sletthus.php/?id="+innId});
+            marker.remove();
         } catch (JSONException e) {
             e.printStackTrace();
         }
