@@ -64,8 +64,6 @@ public class VisEndreFragment extends DialogFragment {
             public void onClick(View view) {
                 if(CheckAllFields()){
                     postReq();
-                    dismiss();
-                    Toast.makeText(getContext(),"Dine endringer er lagret",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -154,6 +152,11 @@ public class VisEndreFragment extends DialogFragment {
 
         @Override
         protected void onPostExecute(String ss) {
+
+            if (!ss.equals("Noe gikk feil")) {
+                dismiss();
+                Toast.makeText(getContext(),"Dine endringer er lagret",Toast.LENGTH_SHORT).show();
+            }
             Log.d("", ss);
         }
     }

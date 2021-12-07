@@ -34,6 +34,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class VisRegistrerFragment extends DialogFragment {
@@ -44,12 +45,14 @@ public class VisRegistrerFragment extends DialogFragment {
     //Get all id's from bottom fragment
     TextView txtAddresse, txtEtasjer, txtBeskrivelse;
     Button btnRegistrer;
+    ArrayList<JSONObject> list;
 
-    public VisRegistrerFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap) {
+    public VisRegistrerFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap, ArrayList<JSONObject> list) {
         this.innAdresse = innAdresse;
         this.selectedLat = selectedLat;
         this.selectedLng = selectedLng;
         this.mMap = mMap;
+        this.list = list;
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,8 +76,6 @@ public class VisRegistrerFragment extends DialogFragment {
                 System.out.println(txtAddresse.getText());
                 System.out.println(txtEtasjer.getText());
                 System.out.println(txtBeskrivelse.getText());
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(new LatLng(selectedLat,selectedLng));
                 /*getJSON task = new getJSON();*/
                 //String str = "{\"adresse\":\"txtAddresse.getText()\",\"age\":\"30\"}";
                 getJSON task = new getJSON();
@@ -92,8 +93,7 @@ public class VisRegistrerFragment extends DialogFragment {
                 if(!innUrl.equals("")){
                     if(CheckAllFields()){
                         task.execute(new String[]{"http://studdata.cs.oslomet.no/~dbuser23/registrerhus.php/?adresse="+innUrl+"&latitude="+selectedLat+"&longitude="+selectedLng+"&etasjer="+txtEtasjer.getText().toString()+"&beskrivelse="+innUrl1});
-                        Toast.makeText(getContext(),"Hus lagret i db",Toast.LENGTH_SHORT).show();
-                        mMap.addMarker(markerOptions);
+
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class VisRegistrerFragment extends DialogFragment {
 
     //POST REQUEST
     private class getJSON extends AsyncTask<String, Void, String> {
-        JSONObject jsonObject;
+        //JSONObject jsonObject;
 
         @Override
         protected String doInBackground(String... urls) {
@@ -140,7 +140,23 @@ public class VisRegistrerFragment extends DialogFragment {
                     while ((s = br.readLine()) != null) {
                         output = output + s;
                     }
+
+                    JSONObject json = new JSONObject();
+                    json.put("id", output);
+                    json.put("adresse", innAdresse);
+                    json.put("latitude", selectedLat);
+                    json.put("longitude", selectedLng);
+                    json.put("etasjer", txtEtasjer.getText().toString());
+                    json.put("beskrivelse", txtBeskrivelse.getText().toString());
+                    Log.d("Test", json.toString());
+                    list.add(json);
+
+
+
+
+
                     conn.disconnect();
+
                     return output;
                 } catch (Exception e) {
                     return "Noe gikk feil";
@@ -151,7 +167,14 @@ public class VisRegistrerFragment extends DialogFragment {
 
         @Override
         protected void onPostExecute(String ss) {
-            Log.d("", ss);
+            Log.d("idem", ss);
+            if(!ss.equals("Noe gikk feil")) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(selectedLat, selectedLng));
+                mMap.addMarker(markerOptions).setSnippet(ss);
+                dismiss();
+                Toast.makeText(getContext(), "Hus lagret i db", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

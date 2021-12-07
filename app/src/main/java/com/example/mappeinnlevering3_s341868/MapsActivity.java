@@ -168,7 +168,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void visRegFragment(String innAdresse, double selectedLat, double selectedLng, GoogleMap mMap){
         System.out.print("Vis reg fragment");
-        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng,mMap);
+        VisRegistrerFragment visRegFragment = new VisRegistrerFragment(innAdresse,selectedLat,selectedLng,mMap, husMarkers);
         visRegFragment.show(getSupportFragmentManager().beginTransaction(),"registrer fragment");
     }
 
@@ -201,11 +201,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     conn.disconnect();
                     try {
-                        JSONArray hus = new JSONArray(output);
-                        for (int i = 0; i < hus.length(); i++) {
-                            JSONObject jsonobject = hus.getJSONObject(i);
-                            husMarkers.add(jsonobject);
-                            retur = retur + jsonobject + "\n";
+                        if(!output.equals("null")) {
+                            JSONArray hus = new JSONArray(output);
+                            for (int i = 0; i < hus.length(); i++) {
+                                JSONObject jsonobject = hus.getJSONObject(i);
+                                husMarkers.add(jsonobject);
+                                retur = retur + jsonobject + "\n";
+                            }
                         }
                         return retur;
                     } catch (JSONException e) {

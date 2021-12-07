@@ -110,6 +110,7 @@ public class DisplayBottomFragment extends BottomSheetDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         System.out.println("trukket på ja");
                         postReq();
+                        dismiss();
                     }
                 })
                 .setNegativeButton("Nei", new DialogInterface.OnClickListener() {
